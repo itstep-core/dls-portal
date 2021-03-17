@@ -1,0 +1,10 @@
+﻿.content {
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+.content h1 {
+    font-size: 18pt;
+    font-style: italic;
+    margin-bottom: 15px;
+    color: gray;
+}

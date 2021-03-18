@@ -19,5 +19,6 @@ namespace Second_App.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Tutor> Tutors { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

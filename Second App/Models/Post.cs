@@ -7,7 +7,7 @@ namespace Second_App.Models
     {
         public int Id { get; set; }
 
-        [Required] public int UserId { get; set; }
+        [Required] public string ApplicationUserId { get; set; }
         [Required] [StringLength(256)] public string Title { get; set; }
 
         [Required]

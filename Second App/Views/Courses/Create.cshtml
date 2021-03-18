@@ -1,22 +1,61 @@
 ﻿@model Second_App.Models.Course
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Добавление курса";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Добавление курса</h1>
 
-<h4>Course</h4>
+<h4>Параметры курса</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="About" class="control-label"></label>
+                <textarea asp-for="About" class="form-control"></textarea>
+                <span asp-validation-for="About" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Details" class="control-label"></label>
+                <textarea asp-for="Details" class="form-control"></textarea>
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input type="file" name="uploaded_file" class="form-control" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LessonsCount" class="control-label"></label>
+                <input asp-for="LessonsCount" class="form-control" />
+                <span asp-validation-for="LessonsCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LessonsDuration" class="control-label"></label>
+                <input asp-for="LessonsDuration" class="form-control" />
+                <span asp-validation-for="LessonsDuration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Schedule" class="control-label"></label>
+                <input asp-for="Schedule" class="form-control" />
+                <span asp-validation-for="Schedule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TutorId" class="control-label"></label>
+                <select asp-for="TutorId" class ="form-control" asp-items="ViewBag.TutorId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

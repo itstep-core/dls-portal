@@ -2,27 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Second_App.Data;
 using Second_App.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Second_App.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Courses.ToListAsync());
+            var applicationDbContext = _context.Courses.Include(c => c.Tutor);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Courses/Details/5
@@ -34,6 +40,7 @@ namespace Second_App.Controllers
             }
 
             var course = await _context.Courses
+                .Include(c => c.Tutor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
@@ -46,6 +53,7 @@ namespace Second_App.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
+            ViewData["TutorId"] = new SelectList(_context.Tutors, "Id", "FullName");
             return View();
         }
 
@@ -54,14 +62,23 @@ namespace Second_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Name,About,Details,ImagePath,LessonsCount,LessonsDuration,Schedule,Price,TutorId")] Course course,
+            IFormFile uploaded_file)
         {
-            if (ModelState.IsValid)
+            string path = "";
+            if (uploaded_file != null)
             {
+                path = $"/files/{uploaded_file.FileName}";
+                using (FileStream fs = new FileStream($"{_appEnvironment.WebRootPath}{path}", FileMode.Create))
+                {
+                    await uploaded_file.CopyToAsync(fs);
+                }
+                course.ImagePath = path;
                 _context.Add(course);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TutorId"] = new SelectList(_context.Tutors, "Id", "FullName", course.TutorId);
             return View(course);
         }
 
@@ -78,6 +95,7 @@ namespace Second_App.Controllers
             {
                 return NotFound();
             }
+            ViewData["TutorId"] = new SelectList(_context.Tutors, "Id", "FullName", course.TutorId);
             return View(course);
         }
 
@@ -86,7 +104,7 @@ namespace Second_App.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,About,Details,ImagePath,LessonsCount,LessonsDuration,Schedule,Price,TutorId")] Course course)
         {
             if (id != course.Id)
             {
@@ -113,6 +131,7 @@ namespace Second_App.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TutorId"] = new SelectList(_context.Tutors, "Id", "FullName", course.TutorId);
             return View(course);
         }
 
@@ -125,6 +144,7 @@ namespace Second_App.Controllers
             }
 
             var course = await _context.Courses
+                .Include(c => c.Tutor)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {

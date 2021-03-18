@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Second_App.Data;
 
 namespace Second_App.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210318091343_CoursesMigration2")]
+    partial class CoursesMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +256,10 @@ namespace Second_App.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CourseId")
@@ -276,7 +281,7 @@ namespace Second_App.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId1");
 
                     b.HasIndex("CourseId");
 
@@ -290,7 +295,10 @@ namespace Second_App.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PostId")
@@ -306,7 +314,7 @@ namespace Second_App.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId1");
 
                     b.HasIndex("PostId");
 
@@ -346,8 +354,8 @@ namespace Second_App.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Schedule")
                         .IsRequired()
@@ -469,8 +477,10 @@ namespace Second_App.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicationUserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Full")
@@ -492,7 +502,7 @@ namespace Second_App.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId1");
 
                     b.ToTable("Posts");
                 });
@@ -597,7 +607,7 @@ namespace Second_App.Data.Migrations
                 {
                     b.HasOne("Second_App.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId1");
 
                     b.HasOne("Second_App.Models.Course", "Course")
                         .WithMany("Clients")
@@ -610,7 +620,7 @@ namespace Second_App.Data.Migrations
                 {
                     b.HasOne("Second_App.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Comments")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId1");
 
                     b.HasOne("Second_App.Models.Post", "Post")
                         .WithMany("Comments")
@@ -663,9 +673,7 @@ namespace Second_App.Data.Migrations
                 {
                     b.HasOne("Second_App.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Posts")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId1");
                 });
 
             modelBuilder.Entity("Second_App.Models.Tutor", b =>

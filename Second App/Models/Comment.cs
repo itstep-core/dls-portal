@@ -7,7 +7,7 @@ namespace Second_App.Models
         public int Id { get; set; }
 
         public int PostId { get; set; }
-        public int UserId { get; set; }
+        public string ApplicationUserId { get; set; }
         [DataType(DataType.Date)] public DataType PublishDate { get; set; }
 
 
